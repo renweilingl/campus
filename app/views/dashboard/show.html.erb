@@ -1,0 +1,24 @@
+<% content_for(:title, "控制台") %>
+
+<div class="layui-card">
+  <div class="layui-card-header">账号信息</div>
+
+  <div class="layui-card-body">
+    <dl class="campus-profile">
+      <dt>手机号</dt>
+      <dd><%= @user.phone %></dd>
+
+      <dt>昵称</dt>
+      <dd><%= @user.nickname.presence || "—" %></dd>
+
+      <dt>角色</dt>
+      <dd><%= @user.role %></dd>
+
+      <dt>状态</dt>
+      <dd><%= @user.status %></dd>
+
+      <dt>注册时间</dt>
+      <dd><%= @user.created_at.strftime("%Y-%m-%d %H:%M") %></dd>
+    </dl>
+  </div>
+</div>

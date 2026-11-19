@@ -1,0 +1,310 @@
+/*
+ * 主题覆盖层。
+ *
+ * layout 里的加载顺序是先 vendor 的 layui/css/layui.css，再 stylesheet_link_tag :app
+ * （Propshaft 的 :app 只收 app/assets/**\/*.css，vendor 里的不会自动带上）。
+ * 所以本文件的规则会覆盖 layui 的默认样式。
+ *
+ * 原则：只写 layui 没有的东西，以及必须改的默认值，不要在这里重新实现组件。
+ * body 的字号和字体族故意不写，沿用 layui 的 14px / -apple-system + PingFang SC。
+ */
+
+:root {
+  --bg: #f6f7f9;
+  --card: #fff;
+  --text: #1c1c1e;
+  --muted: #6b6b70;
+  --line: #e3e3e6;
+  /* 对齐 .layui-btn 的 background-color，否则链接和按钮会是两种颜色 */
+  --accent: #16baaa;
+  --danger: #c0392b;
+  --ok: #1e7d43;
+  /* 侧栏配色取样自设计图：整列自上而下渐变，选中项深一档 */
+  --side-top: #03c58d;
+  --side-bottom: #0ac263;
+  --side-active: #0fa674;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent);
+}
+
+/* --- 左侧导航布局（layui-layout-admin）---
+ * 定位和宽度用 layui 自带的：header 固定 60px、side 固定 200px、body left:200px。
+ * 与设计图对齐的两处调整：侧栏从 top:0 通高（品牌块放在侧栏里），
+ * header 让出侧栏宽度（left:200px）变成一条白底栏目条。
+ * 另补 layui 没给的：
+ *   1. side 的底色——.layui-side 本身没有 background；
+ *   2. body 的 overflow——它是 absolute 且 top/bottom 都定了，不加 overflow-y
+ *      长页面会被裁掉，而且整个窗口没有滚动条；
+ *   3. 移动端——layui 2.13 的 admin 布局没有任何媒体查询，200px 侧栏在小屏上
+ *      会吃掉大半宽度，所以 <768px 把侧栏变成 header 下的横向标签条
+ *      （同一份 markup，不复制导航）。
+ */
+.layui-layout-admin .campus-side {
+  top: 0;
+  background: linear-gradient(180deg, var(--side-top), var(--side-bottom));
+}
+
+/* 品牌块在侧栏顶部，和下面的菜单连成一整条绿色 */
+.campus-brand {
+  display: block;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* 品牌块占了 60px，scroll 区不能再是 100% 高，否则溢出侧栏 */
+.campus-side .layui-side-scroll {
+  height: auto;
+}
+
+/* 侧栏里的 ul.layui-nav 自带 #2f363c 深灰底，会盖住渐变，改成透明 */
+.campus-side .layui-nav {
+  background-color: transparent;
+}
+
+/* 选中项用深一档的绿，替代 layui 默认的青色块 */
+.campus-side .layui-nav-tree .layui-this,
+.campus-side .layui-nav-tree .layui-this > a,
+.campus-side .layui-nav-tree .layui-this > a:hover {
+  background-color: var(--side-active);
+  color: #fff;
+}
+
+/* 设计图里未选中的菜单文字是纯白，不是 layui 默认的 70% 白 */
+.campus-side .layui-nav .layui-nav-item a {
+  color: #fff;
+}
+
+/* --- 顶栏：设计图是纯白一条，左栏目名、右身份区，无阴影无描边 --- */
+.layui-layout-admin .layui-header {
+  left: 200px;
+  background-color: #fff;
+}
+
+.campus-no-side .layui-header {
+  left: 0;
+}
+
+.campus-section-title {
+  padding-left: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 60px;
+  color: #333;
+}
+
+.layui-body.campus-body {
+  padding: 24px 15px 48px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+/* 未登录时不渲染侧栏（只有登录页），body 不能还留着 200px 的左偏移 */
+.campus-no-side .layui-body {
+  left: 0;
+}
+
+/* layui 的 .layui-nav-item 假设子元素是 <a>；放纯文本（当前用户）或
+ * button_to 生成的 <form> 时，内边距和字色都得自己补。
+ * 白顶栏上文字用设计图的 #333；line-height 用 inherit 跟 header 的 60px 走。
+ */
+.campus-who {
+  padding: 0 20px;
+  font-size: 13px;
+  line-height: inherit;
+  color: #333;
+}
+
+.campus-logout-form {
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.campus-logout {
+  padding: 0 20px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  line-height: inherit;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.campus-logout:hover {
+  color: var(--accent);
+}
+
+.layui-header {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+@media screen and (max-width: 767.98px) {
+  .layui-layout-admin .layui-header {
+    left: 0;
+  }
+
+  /* 侧栏脱离 fixed 变成文档流里的横条；header 是 fixed 不占流，用 margin 顶开 */
+  .layui-layout-admin .campus-side {
+    position: static;
+    width: 100%;
+    margin-top: 60px;
+  }
+
+  .campus-brand {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+  }
+
+  .layui-side-scroll,
+  .layui-layout-admin .campus-side .layui-nav-tree {
+    width: 100%;
+  }
+
+  .layui-layout-admin .campus-side .layui-nav-tree {
+    display: flex;
+  }
+
+  .layui-layout-admin .campus-side .layui-nav-item {
+    flex: 1;
+    width: auto;
+    text-align: center;
+  }
+
+  .layui-layout-admin .layui-body {
+    position: static;
+    left: 0;
+    top: auto;
+    margin-top: 60px;
+  }
+
+  /* 有侧栏横条时它已经顶开了 header，body 不用再顶一次 */
+  .layui-layout-admin .layui-side + .layui-body {
+    margin-top: 0;
+  }
+
+  /* header 右侧导航：layui 移动端把 nav-item 改成 block/100% 宽，
+     在 absolute 定位的右导航里会竖着叠出 header，改回横排 */
+  .layui-header .layui-layout-right {
+    display: flex;
+  }
+
+  .layui-header .layui-layout-right .layui-nav-item {
+    width: auto;
+    line-height: 60px;
+  }
+
+  .campus-who,
+  .campus-logout {
+    padding: 0 12px;
+  }
+
+  .campus-section-title {
+    padding-left: 12px;
+    font-size: 15px;
+  }
+}
+
+.campus-title {
+  margin: 0 0 15px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* --- flash --- */
+.campus-flash {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+.campus-flash .layui-icon {
+  font-size: 16px;
+}
+
+.campus-flash-notice {
+  background: #e7f6ec;
+  color: var(--ok);
+}
+
+.campus-flash-alert {
+  background: #fdecea;
+  color: var(--danger);
+}
+
+/* --- 登录页 --- */
+.campus-auth {
+  max-width: 420px;
+  margin: 48px auto 0;
+}
+
+.campus-auth .layui-card-header {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* --- 账号信息 --- */
+.campus-profile {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 10px 16px;
+  font-size: 14px;
+}
+
+.campus-profile dt {
+  color: var(--muted);
+}
+
+/* --- 后台指标 --- */
+.campus-metric {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--accent);
+}
+
+/* --- 列表页头 ---
+ * 页面大标题已收进顶栏栏目名，页头只剩右侧的动作按钮。 */
+.campus-page-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+/* button_to 生成的 form 默认是块级，放进表格单元格或按钮组里要改成行内 */
+.campus-inline-form {
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* --- 表单行内校验错误 --- */
+.campus-field-error {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--danger);
+}
+
+.campus-empty {
+  color: var(--muted);
+}

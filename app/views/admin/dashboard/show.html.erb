@@ -1,0 +1,23 @@
+<% content_for(:title, "管理后台") %>
+
+<div class="layui-row layui-col-space16">
+  <div class="layui-col-xs12 layui-col-md6">
+    <div class="layui-card">
+      <div class="layui-card-header">用户总数</div>
+      <div class="layui-card-body campus-metric"><strong><%= @user_count %></strong></div>
+    </div>
+  </div>
+
+  <div class="layui-col-xs12 layui-col-md6">
+    <div class="layui-card">
+      <div class="layui-card-header">当前管理员</div>
+      <div class="layui-card-body"><%= @user.display_name %>（<%= @user.phone %>）</div>
+    </div>
+  </div>
+
+  <%# 放在 row 里当整行的一列：.layui-col-space16 的负下边距会把紧跟其后的
+      普通块级元素拽进浮动区，第一行行盒会被旁边的列挤偏。 %>
+  <div class="layui-col-xs12">
+    <%= link_to "返回控制台", root_path, class: "layui-btn layui-btn-primary layui-btn-sm" %>
+  </div>
+</div>

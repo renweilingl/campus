@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= content_for(:title) || "Campus" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Campus">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (remember to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# layui 必须在前，:app 在后，application.css 里的主题覆盖才生效 %>
+    <%= stylesheet_link_tag "layui/css/layui", "data-turbo-track": "reload" %>
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin<%= " campus-no-side" unless logged_in? %>">
+      <%# 白顶栏：左边栏目名、右边身份区，样式对齐设计图；品牌块在侧栏顶部 %>
+      <header class="layui-header">
+        <span class="campus-section-title"><%= current_section_title %></span>
+
+        <ul class="layui-nav layui-layout-right">
+          <% if logged_in? %>
+            <li class="layui-nav-item campus-who"><%= current_user.display_name %>（<%= current_user.role %>）</li>
+            <li class="layui-nav-item">
+              <%= button_to "退出登录", logout_path, method: :delete,
+                    class: "campus-logout", form_class: "campus-logout-form" %>
+            </li>
+          <% end %>
+        </ul>
+      </header>
+
+      <% if logged_in? %>
+        <aside class="layui-side campus-side">
+          <%= link_to "Campus", root_path, class: "campus-brand" %>
+
+          <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+              <li class="layui-nav-item<%= " layui-this" if current_page?(root_path) %>">
+                <%= link_to "控制台", root_path %>
+              </li>
+              <li class="layui-nav-item<%= " layui-this" if controller_name == "shops" %>">
+                <%= link_to "门店", shops_path %>
+              </li>
+              <% if current_user.admin? %>
+                <li class="layui-nav-item<%= " layui-this" if current_page?(admin_root_path) %>">
+                  <%= link_to "管理后台", admin_root_path %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </aside>
+      <% end %>
+
+      <main class="layui-body campus-body">
+        <% flash.each do |type, message| %>
+          <div class="campus-flash campus-flash-<%= type %>">
+            <i class="layui-icon <%= type.to_s == "alert" ? "layui-icon-close-fill" : "layui-icon-ok-circle" %>"></i>
+            <span><%= message %></span>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+
+    <%= javascript_include_tag "layui/layui", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= yield :page_scripts %>
+  </body>
+</html>

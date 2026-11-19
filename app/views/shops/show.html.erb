@@ -1,0 +1,46 @@
+<% content_for(:title, @shop.name) %>
+
+<h1 class="campus-title"><%= @shop.name %></h1>
+
+<div class="layui-card">
+  <div class="layui-card-header">门店信息</div>
+
+  <div class="layui-card-body">
+    <dl class="campus-profile">
+      <dt>店铺编码</dt>
+      <dd><%= @shop.store_code %></dd>
+
+      <dt>联系电话</dt>
+      <dd><%= @shop.contact_phone %></dd>
+
+      <dt>归属用户</dt>
+      <dd><%= @shop.user.display_name %></dd>
+
+      <dt>营业状态</dt>
+      <dd><%= @shop.status ? "营业中" : "已停业" %></dd>
+
+      <dt>配送费</dt>
+      <dd><%= @shop.delivery_fee_in_yuan %> 元</dd>
+
+      <dt>起送价</dt>
+      <dd><%= @shop.mini_fee_in_yuan %> 元</dd>
+
+      <dt>打包费</dt>
+      <dd><%= @shop.packaging_fee_in_yuan %> 元</dd>
+
+      <dt>配送时长</dt>
+      <dd><%= @shop.delivery_time %> 分钟</dd>
+
+      <dt>收款商户号</dt>
+      <dd><%= @shop.mch_id.presence || "—" %></dd>
+
+      <dt>店铺公告</dt>
+      <dd><%= @shop.description.presence || "—" %></dd>
+    </dl>
+  </div>
+</div>
+
+<p>
+  <%= link_to "编辑", edit_shop_path(@shop), class: "layui-btn layui-btn-primary layui-btn-sm" %>
+  <%= link_to "返回列表", shops_path, class: "layui-btn layui-btn-primary layui-btn-sm" %>
+</p>

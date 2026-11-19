@@ -1,0 +1,32 @@
+<% content_for(:title, "登录") %>
+
+<div class="layui-card campus-auth">
+  <div class="layui-card-header">登录</div>
+
+  <div class="layui-card-body">
+    <%= form_with url: login_path, scope: :session, method: :post, class: "layui-form" do |form| %>
+      <div class="layui-form-item">
+        <%= form.label :phone, "手机号", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.telephone_field :phone, value: @phone, autocomplete: "tel", inputmode: "numeric",
+                maxlength: 11, autofocus: true, required: true, class: "layui-input",
+                placeholder: "请输入手机号" %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :password, "密码", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.password_field :password, autocomplete: "current-password", required: true,
+                class: "layui-input", placeholder: "请输入密码" %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <%= form.submit "登录", class: "layui-btn layui-btn-fluid" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

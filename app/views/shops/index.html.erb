@@ -1,0 +1,61 @@
+<% content_for(:title, "门店管理") %>
+
+<div class="campus-page-head">
+  <%= link_to "新增门店", new_shop_path, class: "layui-btn" %>
+</div>
+
+<% if @shops.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>店铺名</th>
+        <th>店铺编码</th>
+        <th>联系电话</th>
+        <th>配送费</th>
+        <th>起送价</th>
+        <th>打包费</th>
+        <th>配送时长</th>
+        <th>营业状态</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @shops.each do |shop| %>
+        <tr>
+          <td><%= link_to shop.name, shop_path(shop) %></td>
+          <td><%= shop.store_code %></td>
+          <td><%= shop.contact_phone %></td>
+          <td><%= shop.delivery_fee_in_yuan %> 元</td>
+          <td><%= shop.mini_fee_in_yuan %> 元</td>
+          <td><%= shop.packaging_fee_in_yuan %> 元</td>
+          <td><%= shop.delivery_time %> 分钟</td>
+          <td>
+            <%# 这一列只展示真实状态；切换动作在操作列，避免把动作文案当成状态读反 %>
+            <% if shop.status %>
+              <span class="layui-badge layui-bg-green">营业中</span>
+            <% else %>
+              <span class="layui-badge-rim">已停业</span>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "编辑", edit_shop_path(shop), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to shop.status ? "停业" : "营业", toggle_status_shop_path(shop),
+                  method: :patch,
+                  class: "layui-btn layui-btn-xs #{shop.status ? "layui-btn-warm" : ""}",
+                  form_class: "campus-inline-form" %>
+            <%= button_to "删除", shop_path(shop), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该门店？')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      还没有门店，<%= link_to "新增第一个门店", new_shop_path %>。
+    </div>
+  </div>
+<% end %>
