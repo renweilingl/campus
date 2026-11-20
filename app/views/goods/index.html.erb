@@ -27,7 +27,7 @@
           <td>
             <div class="campus-good-cell">
               <% if good.image_url.present? %>
-                <%= image_tag good.image_url, class: "campus-thumb", alt: good.name, loading: "lazy" %>
+                <%= image_tag good.image_display_url, class: "campus-thumb", alt: good.name, loading: "lazy" %>
               <% else %>
                 <span class="campus-thumb campus-thumb-empty"></span>
               <% end %>

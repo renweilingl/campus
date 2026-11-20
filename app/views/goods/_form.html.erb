@@ -67,11 +67,16 @@
   </div>
 
   <div class="layui-form-item">
-    <%= form.label :image_url, "图片链接", class: "layui-form-label" %>
+    <%= form.label :image_file, "菜品图片", class: "layui-form-label" %>
     <div class="layui-input-block">
-      <%= form.text_field :image_url, class: "layui-input", placeholder: "选填" %>
-      <div class="layui-word-aux">需为 http(s) 开头的图片链接</div>
-      <%= render "shared/field_errors", errors: @good.errors[:image_url] %>
+      <%# 编辑页展示已有图片；不选新文件就沿用原 OSS 路径 %>
+      <% if @good.image_url.present? %>
+        <%= image_tag @good.image_display_url, class: "campus-thumb campus-thumb-preview", alt: @good.name %>
+      <% end %>
+      <%= form.file_field :image_file, class: "layui-input",
+            accept: "image/jpeg,image/png,image/gif,image/webp" %>
+      <div class="layui-word-aux">选填，支持 jpg / png / gif / webp，不超过 5MB；留空保持原图</div>
+      <%= render "shared/field_errors", errors: @good.errors[:image_file] %>
     </div>
   </div>
 

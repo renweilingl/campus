@@ -346,3 +346,11 @@ a {
 .campus-thumb-empty {
   border: 1px solid var(--line);
 }
+
+/* 编辑页的已有图片预览，比列表缩略图大一档 */
+.campus-thumb-preview {
+  display: block;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 8px;
+}

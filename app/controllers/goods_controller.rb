@@ -63,6 +63,7 @@ class GoodsController < ApplicationController
     end
 
     def good_params
-      params.expect(good: %i[name category_id price_in_yuan unit stock recommend on_sale must_order image_url])
+      # image_url 由上传回调写 OSS 路径生成，不收表单值；表单只提交图片文件 image_file
+      params.expect(good: %i[name category_id price_in_yuan unit stock recommend on_sale must_order image_file])
     end
 end
