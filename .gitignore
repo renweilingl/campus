@@ -9,6 +9,7 @@ tmp
 log
 log/*.log
 test
+env.sh
 .env
 .idea
 .DS_Store
