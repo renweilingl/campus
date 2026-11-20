@@ -50,17 +50,17 @@
           <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree">
               <li class="layui-nav-item<%= " layui-this" if current_page?(root_path) %>">
-                <%= link_to "控制台", root_path %>
+                <%= link_to root_path do %><i class="layui-icon layui-icon-console"></i>控制台<% end %>
               </li>
               <li class="layui-nav-item<%= " layui-this" if controller_name == "shops" %>">
-                <%= link_to "门店管理", shops_path %>
+                <%= link_to shops_path do %><i class="layui-icon layui-icon-home"></i>门店管理<% end %>
               </li>
               <li class="layui-nav-item<%= " layui-this" if controller_name == "categories" %>">
-                <%= link_to "菜品分类", categories_path %>
+                <%= link_to categories_path do %><i class="layui-icon layui-icon-app"></i>菜品分类<% end %>
               </li>
               <% if current_user.admin? %>
                 <li class="layui-nav-item<%= " layui-this" if current_page?(admin_root_path) %>">
-                  <%= link_to "管理后台", admin_root_path %>
+                  <%= link_to admin_root_path do %><i class="layui-icon layui-icon-set"></i>管理后台<% end %>
                 </li>
               <% end %>
             </ul>

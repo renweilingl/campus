@@ -85,6 +85,14 @@ a {
   color: #fff;
 }
 
+/* 导航图标：layui 默认 .layui-icon 是深灰、贴基线，白字侧栏里要跟着文字走并垂直居中 */
+.campus-side .layui-nav .layui-icon {
+  margin-right: 8px;
+  padding: 0;
+  color: inherit;
+  vertical-align: middle;
+}
+
 /* --- 顶栏：设计图是纯白一条，左栏目名、右身份区，无阴影无描边 --- */
 .layui-layout-admin .layui-header {
   left: 200px;
@@ -182,6 +190,15 @@ a {
     flex: 1;
     width: auto;
     text-align: center;
+  }
+
+  /* 横条排 4 项时默认 20px 左右内边距放不下图标，收窄让位 */
+  .layui-layout-admin .campus-side .layui-nav-item a {
+    padding: 0 6px;
+  }
+
+  .campus-side .layui-nav .layui-icon {
+    margin-right: 4px;
   }
 
   .layui-layout-admin .layui-body {
