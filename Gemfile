@@ -86,3 +86,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "carrierwave", "0.8.0"
+gem 'carrierwave-aliyun', '~> 0.7.0'
