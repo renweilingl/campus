@@ -8,6 +8,7 @@ module ApplicationHelper
     "categories" => "菜品分类",
     "goods" => "菜品管理",
     "good_specs" => "规格设置",
+    "my_shops" => "我的店铺",
     "admin/dashboard" => "管理后台",
     "sessions" => "登录"
   }.freeze

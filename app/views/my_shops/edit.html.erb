@@ -1,0 +1,83 @@
+<% content_for(:title, "我的店铺") %>
+
+<%# 顶栏栏目名已是“我的店铺”，h1 用店铺名承担页面身份，不重复栏目名 %>
+<h1 class="campus-title"><%= @shop.name %></h1>
+
+<div class="layui-card">
+  <div class="layui-card-body">
+    <%= form_with model: @shop, url: my_shop_path, method: :patch, class: "layui-form" do |form| %>
+      <div class="layui-form-item">
+        <%= form.label :name, "店铺名", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.text_field :name, class: "layui-input", required: true, placeholder: "请输入店铺名" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:name] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :store_code, "店铺编码", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%# 编码系统生成且不可改：disabled 的控件不随表单提交，MY_SHOP_FIELDS 也不收 %>
+          <%= form.text_field :store_code, class: "layui-input", disabled: true %>
+          <div class="layui-word-aux">系统生成，不可修改</div>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :contact_phone, "联系电话", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.telephone_field :contact_phone, class: "layui-input", required: true,
+                inputmode: "numeric", maxlength: 11, placeholder: "请输入手机号" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:contact_phone] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :delivery_fee_in_yuan, "配送费（元）", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.text_field :delivery_fee_in_yuan, type: :number, step: "0.01", min: "0", class: "layui-input" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:delivery_fee] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :mini_fee_in_yuan, "起送价（元）", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.text_field :mini_fee_in_yuan, type: :number, step: "0.01", min: "0", class: "layui-input" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:mini_fee] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :packaging_fee_in_yuan, "打包费（元）", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.text_field :packaging_fee_in_yuan, type: :number, step: "0.01", min: "0", class: "layui-input" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:packaging_fee] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :delivery_time, "配送时长（分钟）", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.number_field :delivery_time, min: "0", step: "1", class: "layui-input" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:delivery_time] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <%= form.label :description, "店铺公告", class: "layui-form-label" %>
+        <div class="layui-input-block">
+          <%= form.text_area :description, rows: 3, class: "layui-textarea", placeholder: "选填" %>
+          <%= render "shared/field_errors", errors: @shop.errors[:description] %>
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <%= form.submit "保存", class: "layui-btn" %>
+          <%= link_to "取消", shops_path, class: "layui-btn layui-btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

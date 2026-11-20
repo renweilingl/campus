@@ -24,6 +24,10 @@ Rails.application.routes.draw do
     resources :specs, controller: "good_specs", except: :show
   end
 
+  # 我的店铺：店主自助改自己门店的基础信息；营业状态走门店列表的开关、
+  # 收款商户号属支付配置，都不在自助范围，见 MyShopsController::MY_SHOP_FIELDS
+  resource :my_shop, controller: "my_shops", only: %i[edit update]
+
   namespace :admin do
     root to: "dashboard#show"
   end
