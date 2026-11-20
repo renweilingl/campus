@@ -53,7 +53,10 @@
                 <%= link_to "控制台", root_path %>
               </li>
               <li class="layui-nav-item<%= " layui-this" if controller_name == "shops" %>">
-                <%= link_to "门店", shops_path %>
+                <%= link_to "门店管理", shops_path %>
+              </li>
+              <li class="layui-nav-item<%= " layui-this" if controller_name == "categories" %>">
+                <%= link_to "菜品分类", categories_path %>
               </li>
               <% if current_user.admin? %>
                 <li class="layui-nav-item<%= " layui-this" if current_page?(admin_root_path) %>">

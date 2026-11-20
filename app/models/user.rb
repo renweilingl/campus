@@ -1,12 +1,22 @@
 class User < ApplicationRecord
   authenticates_with_sorcery!
 
+  # shops.user_id 是唯一索引，所以一个账号最多一家门店；
+  # user_id 是 NOT NULL，删账号时只能连带删门店，不能置空
+  has_one :shop, dependent: :destroy
+  # 菜品分类也直接挂在账号上（冗余归属）。必须声明在 has_one :shop 之后：
+  # 先删门店会连带删掉分类，轮到这条时关联查询只剩空集合
+  has_many :categories, dependent: :destroy
+
   PHONE_FORMAT = /\A1[3-9]\d{9}\z/
   ROLES = %w[user admin].freeze
   STATUSES = %w[disabled enabled].freeze
 
   enum :role, ROLES.index_by(&:to_sym), default: "user"
   enum :status, STATUSES.index_by(&:to_sym), default: "enabled"
+
+  # 一人一店：能被指派为门店归属的账号，见 ShopsController#owner_candidates
+  scope :without_shop, -> { enabled.where.missing(:shop) }
 
   validates :phone, presence: true,
                     format: { with: PHONE_FORMAT, message: "手机号格式不正确" },
@@ -26,6 +36,11 @@ class User < ApplicationRecord
 
   def display_name
     nickname.presence || phone
+  end
+
+  # 归属下拉里同昵称的账号会撞名，所以额外带上手机号
+  def option_label
+    nickname.presence ? "#{nickname}（#{phone}）" : phone
   end
 
   private

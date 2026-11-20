@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_062439) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_19_072529) do
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "visible", default: true, null: false
+    t.boolean "must_order", default: false, null: false
+    t.integer "recommend", default: 0, null: false
+    t.bigint "user_id", null: false
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id", "name"], name: "index_categories_on_shop_id_and_name", unique: true
+    t.index ["shop_id"], name: "index_categories_on_shop_id"
+    t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
   create_table "shops", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "contact_phone", null: false
@@ -26,7 +40,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_062439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["store_code"], name: "index_shops_on_store_code", unique: true
-    t.index ["user_id"], name: "index_shops_on_user_id"
+    t.index ["user_id"], name: "index_shops_on_user_id", unique: true
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -41,5 +55,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_062439) do
     t.index ["phone"], name: "index_users_on_phone", unique: true
   end
 
+  add_foreign_key "categories", "shops"
+  add_foreign_key "categories", "users"
   add_foreign_key "shops", "users"
 end

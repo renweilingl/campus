@@ -15,6 +15,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # 分类只有 4 个字段，列表页已经全都展示了，所以不做详情页
+  resources :categories, except: :show
+
   namespace :admin do
     root to: "dashboard#show"
   end

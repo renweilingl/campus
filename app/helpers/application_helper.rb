@@ -4,7 +4,8 @@ module ApplicationHelper
   # 这样“编辑门店”“新增门店”等子页面顶栏仍然显示所属栏目“门店”。
   SECTION_TITLES = {
     "dashboard" => "控制台",
-    "shops" => "门店",
+    "shops" => "门店管理",
+    "categories" => "菜品分类",
     "admin/dashboard" => "管理后台",
     "sessions" => "登录"
   }.freeze

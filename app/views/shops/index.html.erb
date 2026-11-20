@@ -1,8 +1,11 @@
 <% content_for(:title, "门店管理") %>
 
-<div class="campus-page-head">
-  <%= link_to "新增门店", new_shop_path, class: "layui-btn" %>
-</div>
+<%# 门店只能由管理员代建，非管理员不给入口；空页头只剩 margin，所以整块不渲染 %>
+<% if policy(Shop.new).create? %>
+  <div class="campus-page-head">
+    <%= link_to "新增门店", new_shop_path, class: "layui-btn" %>
+  </div>
+<% end %>
 
 <% if @shops.any? %>
   <table class="layui-table">
@@ -55,7 +58,12 @@
 <% else %>
   <div class="layui-card">
     <div class="layui-card-body campus-empty">
-      还没有门店，<%= link_to "新增第一个门店", new_shop_path %>。
+      <%# 非管理员点进新增页就是 403，所以空状态不能再给链接 %>
+      <% if policy(Shop.new).create? %>
+        还没有门店，<%= link_to "新增第一个门店", new_shop_path %>。
+      <% else %>
+        还没有门店，请联系管理员开通。
+      <% end %>
     </div>
   </div>
 <% end %>

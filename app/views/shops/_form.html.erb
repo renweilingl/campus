@@ -1,4 +1,19 @@
 <%= form_with model: @shop, class: "layui-form" do |form| %>
+  <%# 归属只能在创建时指定：编辑页不出现这个字段，shop_params 也不收 user_id。
+      layui 会把原生 select 隐藏后换成自己的皮肤，所以不能加 required——
+      隐藏的控件触发 HTML5 校验时浏览器只会拦下提交、不给任何提示。 %>
+  <% if @shop.new_record? %>
+    <div class="layui-form-item">
+      <%= form.label :user_id, "归属账号", class: "layui-form-label" %>
+      <div class="layui-input-block">
+        <%= form.collection_select :user_id, @owner_candidates, :id, :option_label,
+              include_blank: "请选择归属账号" %>
+        <%# presence 校验挂在 :user 上、一人一店的 uniqueness 挂在 :user_id 上，两条都要显示 %>
+        <%= render "shared/field_errors", errors: @shop.errors[:user] + @shop.errors[:user_id] %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="layui-form-item">
     <%= form.label :name, "店铺名", class: "layui-form-label" %>
     <div class="layui-input-block">
@@ -10,7 +25,11 @@
   <div class="layui-form-item">
     <%= form.label :store_code, "店铺编码", class: "layui-form-label" %>
     <div class="layui-input-block">
-      <%= form.text_field :store_code, class: "layui-input", required: true, placeholder: "如 SHOP001" %>
+      <%# 编码由系统在创建时生成、之后不可改：disabled 的控件不随表单提交，
+          shop_params 里也收不到 store_code %>
+      <%= form.text_field :store_code, class: "layui-input", disabled: true,
+            placeholder: "保存后自动生成" %>
+      <div class="layui-word-aux">系统生成，不可修改</div>
       <%= render "shared/field_errors", errors: @shop.errors[:store_code] %>
     </div>
   </div>

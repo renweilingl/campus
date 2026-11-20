@@ -1,0 +1,63 @@
+<% content_for(:title, "菜品分类") %>
+
+<%# 没有门店的账号 policy 会拒绝创建，按钮跟着收起来；空页头只剩 margin，所以整块不渲染 %>
+<% if policy(Category.new).create? %>
+  <div class="campus-page-head">
+    <%= link_to "新增分类", new_category_path, class: "layui-btn" %>
+  </div>
+<% end %>
+
+<% if @categories.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>分类名</th>
+        <th>推荐权重</th>
+        <th>是否显示</th>
+        <th>是否必点</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories.each do |category| %>
+        <tr>
+          <td><%= link_to category.name, edit_category_path(category) %></td>
+          <td><%= category.recommend %></td>
+          <td>
+            <%# 这一列只展示真实状态，改状态走编辑页，避免把动作文案当成状态读反 %>
+            <% if category.visible %>
+              <span class="layui-badge layui-bg-green">显示</span>
+            <% else %>
+              <span class="layui-badge-rim">隐藏</span>
+            <% end %>
+          </td>
+          <td>
+            <% if category.must_order %>
+              <span class="layui-badge layui-bg-orange">必点</span>
+            <% else %>
+              <span class="layui-badge-rim">非必点</span>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "编辑", edit_category_path(category), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to "删除", category_path(category), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该分类？')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      <%# 没有门店的用户点进新增页就是 403，所以空状态不能再给链接 %>
+      <% if policy(Category.new).create? %>
+        还没有菜品分类，<%= link_to "新增第一个分类", new_category_path %>。
+      <% else %>
+        还没有门店，请联系管理员开通后再管理菜品分类。
+      <% end %>
+    </div>
+  </div>
+<% end %>

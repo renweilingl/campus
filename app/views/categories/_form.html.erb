@@ -1,0 +1,40 @@
+<%= form_with model: @category, class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :name, "分类名", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :name, class: "layui-input", required: true, maxlength: 20,
+            placeholder: "如 热菜" %>
+      <%= render "shared/field_errors", errors: @category.errors[:name] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :recommend, "推荐权重", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.number_field :recommend, min: "0", step: "1", class: "layui-input" %>
+      <div class="layui-word-aux">数字越大越靠前</div>
+      <%= render "shared/field_errors", errors: @category.errors[:recommend] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :visible, "是否显示", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.check_box :visible, "lay-skin": "switch", "lay-text": "显示|隐藏" %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :must_order, "是否必点", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.check_box :must_order, "lay-skin": "switch", "lay-text": "必点|非必点" %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", categories_path, class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>

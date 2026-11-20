@@ -7,8 +7,10 @@ class ShopPolicy < ApplicationPolicy
     owner_or_admin?
   end
 
+  # 门店只能由管理员代建，归属账号在创建表单里指定；
+  # 管理员自己名下有没有门店都不影响代建，一人一店限制的是被指派的那个账号
   def create?
-    true
+    user.admin?
   end
 
   def update?
