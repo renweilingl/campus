@@ -58,6 +58,9 @@
               <li class="layui-nav-item<%= " layui-this" if controller_name == "categories" %>">
                 <%= link_to categories_path do %><i class="layui-icon layui-icon-app"></i>菜品分类<% end %>
               </li>
+              <li class="layui-nav-item<%= " layui-this" if controller_name == "goods" %>">
+                <%= link_to goods_path do %><i class="layui-icon layui-icon-cart"></i>菜品管理<% end %>
+              </li>
               <% if current_user.admin? %>
                 <li class="layui-nav-item<%= " layui-this" if current_page?(admin_root_path) %>">
                   <%= link_to admin_root_path do %><i class="layui-icon layui-icon-set"></i>管理后台<% end %>

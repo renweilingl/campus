@@ -6,6 +6,7 @@ module ApplicationHelper
     "dashboard" => "控制台",
     "shops" => "门店管理",
     "categories" => "菜品分类",
+    "goods" => "菜品管理",
     "admin/dashboard" => "管理后台",
     "sessions" => "登录"
   }.freeze

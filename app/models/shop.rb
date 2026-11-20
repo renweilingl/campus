@@ -4,6 +4,8 @@ class Shop < ApplicationRecord
   belongs_to :user, optional: true
   # 删门店要连带删分类，否则 categories.shop_id 的外键会挡住删除
   has_many :categories, dependent: :destroy
+  # 菜品也直接挂在门店上，删门店同样要连带删
+  has_many :goods, dependent: :destroy
   validates :user, presence: { message: "必须存在" }
   # 一个账号只能开一家门店；DB 层 shops.user_id 也是唯一索引，见
   # 20261119062340_add_unique_index_to_shops_user_id，这里负责给出中文文案

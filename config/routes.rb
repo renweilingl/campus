@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   # 分类只有 4 个字段，列表页已经全都展示了，所以不做详情页
   resources :categories, except: :show
 
+  # 菜品的字段列表页也全展示了（图片以缩略图呈现），同样不做详情页
+  resources :goods, except: :show
+
   namespace :admin do
     root to: "dashboard#show"
   end

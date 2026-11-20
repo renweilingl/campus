@@ -1,0 +1,84 @@
+<%= form_with model: @good, class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :name, "菜品名", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :name, class: "layui-input", required: true, maxlength: 20,
+            placeholder: "如 招牌牛肉面" %>
+      <%= render "shared/field_errors", errors: @good.errors[:name] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :category_id, "菜品分类", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%# layui 会把原生 select 隐藏后换成自己的皮肤，所以不能加 required——
+          隐藏的控件触发 HTML5 校验时浏览器只会拦下提交、不给任何提示 %>
+      <%= form.collection_select :category_id, @categories, :id, :name %>
+      <%= render "shared/field_errors", errors: @good.errors[:category] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :price_in_yuan, "单价（元）", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :price_in_yuan, type: :number, step: "0.01", min: "0", class: "layui-input" %>
+      <%= render "shared/field_errors", errors: @good.errors[:price] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :unit, "单位", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :unit, class: "layui-input", required: true, maxlength: 10,
+            placeholder: "如 份 / 碗" %>
+      <%= render "shared/field_errors", errors: @good.errors[:unit] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :stock, "库存", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.number_field :stock, min: "0", step: "1", class: "layui-input" %>
+      <%= render "shared/field_errors", errors: @good.errors[:stock] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :recommend, "推荐指数", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.number_field :recommend, min: "0", step: "1", class: "layui-input" %>
+      <div class="layui-word-aux">数字越大越靠前</div>
+      <%= render "shared/field_errors", errors: @good.errors[:recommend] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :on_sale, "销售状态", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.check_box :on_sale, "lay-skin": "switch", "lay-text": "在售|停售" %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :must_order, "是否必点", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.check_box :must_order, "lay-skin": "switch", "lay-text": "必点|非必点" %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :image_url, "图片链接", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :image_url, class: "layui-input", placeholder: "选填" %>
+      <div class="layui-word-aux">需为 http(s) 开头的图片链接</div>
+      <%= render "shared/field_errors", errors: @good.errors[:image_url] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", goods_path, class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>

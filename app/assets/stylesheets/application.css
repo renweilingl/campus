@@ -325,3 +325,24 @@ a {
 .campus-empty {
   color: var(--muted);
 }
+
+/* --- 菜品列表 --- */
+.campus-good-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.campus-thumb {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  object-fit: cover;
+  background: var(--bg);
+}
+
+/* 没填图片链接时的占位框，保证整列菜品名对齐 */
+.campus-thumb-empty {
+  border: 1px solid var(--line);
+}

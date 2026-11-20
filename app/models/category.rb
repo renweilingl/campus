@@ -4,6 +4,8 @@ class Category < ApplicationRecord
   # DB 层 user_id / shop_id 仍是 NOT NULL
   belongs_to :user, optional: true
   belongs_to :shop, optional: true
+  # 删分类要连带删菜品，否则 goods.category_id 的外键会挡住删除
+  has_many :goods, dependent: :destroy
   validates :user, presence: { message: "必须存在" }
   validates :shop, presence: { message: "必须存在" }
 

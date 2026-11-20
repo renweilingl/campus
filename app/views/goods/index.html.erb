@@ -1,0 +1,78 @@
+<% content_for(:title, "菜品管理") %>
+
+<%# 没有门店的账号 policy 会拒绝创建，按钮跟着收起来；空页头只剩 margin，所以整块不渲染 %>
+<% if policy(Good.new).create? %>
+  <div class="campus-page-head">
+    <%= link_to "新增菜品", new_good_path, class: "layui-btn" %>
+  </div>
+<% end %>
+
+<% if @goods.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>菜品</th>
+        <th>分类</th>
+        <th>单价</th>
+        <th>库存</th>
+        <th>推荐指数</th>
+        <th>销售状态</th>
+        <th>是否必点</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @goods.each do |good| %>
+        <tr>
+          <td>
+            <div class="campus-good-cell">
+              <% if good.image_url.present? %>
+                <%= image_tag good.image_url, class: "campus-thumb", alt: good.name, loading: "lazy" %>
+              <% else %>
+                <span class="campus-thumb campus-thumb-empty"></span>
+              <% end %>
+              <%= link_to good.name, edit_good_path(good) %>
+            </div>
+          </td>
+          <td><%= good.category.name %></td>
+          <td><%= good.price_in_yuan %> 元 / <%= good.unit %></td>
+          <td><%= good.stock %></td>
+          <td><%= good.recommend %></td>
+          <td>
+            <%# 这一列只展示真实状态，改状态走编辑页，避免把动作文案当成状态读反 %>
+            <% if good.on_sale %>
+              <span class="layui-badge layui-bg-green">在售</span>
+            <% else %>
+              <span class="layui-badge-rim">停售</span>
+            <% end %>
+          </td>
+          <td>
+            <% if good.must_order %>
+              <span class="layui-badge layui-bg-orange">必点</span>
+            <% else %>
+              <span class="layui-badge-rim">非必点</span>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "编辑", edit_good_path(good), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to "删除", good_path(good), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该菜品？')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      <%# 没有门店的用户点进新增页会被引去分类页，所以空状态不能再给新增链接 %>
+      <% if policy(Good.new).create? %>
+        还没有菜品，<%= link_to "新增第一个菜品", new_good_path %>。
+      <% else %>
+        还没有门店，请联系管理员开通后再管理菜品。
+      <% end %>
+    </div>
+  </div>
+<% end %>

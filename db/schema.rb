@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_19_072529) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_022642) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "visible", default: true, null: false
@@ -23,6 +23,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_072529) do
     t.index ["shop_id", "name"], name: "index_categories_on_shop_id_and_name", unique: true
     t.index ["shop_id"], name: "index_categories_on_shop_id"
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "goods", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "price", default: 0, null: false
+    t.integer "recommend", default: 0, null: false
+    t.string "unit", null: false
+    t.integer "stock", default: 0, null: false
+    t.boolean "on_sale", default: true, null: false
+    t.boolean "must_order", default: false, null: false
+    t.string "image_url"
+    t.bigint "user_id", null: false
+    t.bigint "shop_id", null: false
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_goods_on_category_id"
+    t.index ["shop_id", "name"], name: "index_goods_on_shop_id_and_name", unique: true
+    t.index ["shop_id"], name: "index_goods_on_shop_id"
+    t.index ["user_id"], name: "index_goods_on_user_id"
   end
 
   create_table "shops", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -57,5 +77,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_19_072529) do
 
   add_foreign_key "categories", "shops"
   add_foreign_key "categories", "users"
+  add_foreign_key "goods", "categories"
+  add_foreign_key "goods", "shops"
+  add_foreign_key "goods", "users"
   add_foreign_key "shops", "users"
 end

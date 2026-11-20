@@ -7,6 +7,8 @@ class User < ApplicationRecord
   # 菜品分类也直接挂在账号上（冗余归属）。必须声明在 has_one :shop 之后：
   # 先删门店会连带删掉分类，轮到这条时关联查询只剩空集合
   has_many :categories, dependent: :destroy
+  # 菜品同样直接挂在账号上（冗余归属），理由和顺序同上
+  has_many :goods, dependent: :destroy
 
   PHONE_FORMAT = /\A1[3-9]\d{9}\z/
   ROLES = %w[user admin].freeze
