@@ -12,6 +12,8 @@ class Good < ApplicationRecord
   # 删菜品要连带删规格，否则 good_specs.good_id 的外键会挡住删除
   has_many :specs, class_name: "GoodSpec", foreign_key: :good_id,
                    inverse_of: :good, dependent: :destroy
+  # 口味分组同样从属于菜品，删菜品要连带删，否则外键挡住删除
+  has_many :flavor_groups, dependent: :destroy
 
   # 金额字段以“分”存储；表单与列表统一走 *_in_yuan 读写，避免各处手写 / 100.0
   MONEY_ATTRIBUTES = %i[price].freeze

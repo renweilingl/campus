@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_20_061630) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_073051) do
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "visible", default: true, null: false
@@ -23,6 +23,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_061630) do
     t.index ["shop_id", "name"], name: "index_categories_on_shop_id_and_name", unique: true
     t.index ["shop_id"], name: "index_categories_on_shop_id"
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "flavor_groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "multi_select", default: false, null: false
+    t.integer "min_select", default: 1, null: false
+    t.integer "max_select", default: 1, null: false
+    t.integer "recommend", default: 0, null: false
+    t.bigint "good_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["good_id", "name"], name: "index_flavor_groups_on_good_id_and_name", unique: true
+    t.index ["good_id"], name: "index_flavor_groups_on_good_id"
+  end
+
+  create_table "flavors", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "price", default: 0, null: false
+    t.integer "recommend", default: 0, null: false
+    t.bigint "flavor_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flavor_group_id", "name"], name: "index_flavors_on_flavor_group_id_and_name", unique: true
+    t.index ["flavor_group_id"], name: "index_flavors_on_flavor_group_id"
   end
 
   create_table "good_specs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -88,6 +112,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_061630) do
 
   add_foreign_key "categories", "shops"
   add_foreign_key "categories", "users"
+  add_foreign_key "flavor_groups", "goods"
+  add_foreign_key "flavors", "flavor_groups"
   add_foreign_key "good_specs", "goods"
   add_foreign_key "goods", "categories"
   add_foreign_key "goods", "shops"

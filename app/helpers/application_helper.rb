@@ -8,6 +8,8 @@ module ApplicationHelper
     "categories" => "菜品分类",
     "goods" => "菜品管理",
     "good_specs" => "规格设置",
+    "flavor_groups" => "口味分组",
+    "flavors" => "口味",
     "my_shops" => "我的店铺",
     "admin/dashboard" => "管理后台",
     "sessions" => "登录"

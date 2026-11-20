@@ -1,0 +1,41 @@
+<% content_for(:title, "口味") %>
+
+<div class="campus-page-head">
+  <%= link_to "返回分组", good_flavor_groups_path(@good), class: "layui-btn layui-btn-primary" %>
+  <%= link_to "新增口味", new_good_flavor_group_flavor_path(@good, @group), class: "layui-btn" %>
+</div>
+
+<% if @flavors.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>口味名称</th>
+        <th>加价</th>
+        <th>排序</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @flavors.each do |flavor| %>
+        <tr>
+          <td><%= link_to flavor.name, edit_good_flavor_group_flavor_path(@good, @group, flavor) %></td>
+          <td><%= flavor.price_in_yuan %> 元</td>
+          <td><%= flavor.recommend %></td>
+          <td>
+            <%= link_to "编辑", edit_good_flavor_group_flavor_path(@good, @group, flavor), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to "删除", good_flavor_group_flavor_path(@good, @group, flavor), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该口味？')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      分组「<%= @group.name %>」还没有口味，<%= link_to "新增第一个口味", new_good_flavor_group_flavor_path(@good, @group) %>。
+    </div>
+  </div>
+<% end %>

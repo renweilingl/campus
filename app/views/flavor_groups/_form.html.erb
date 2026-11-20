@@ -1,0 +1,70 @@
+<%= form_with model: [ @good, @group ], class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :name, "分组名称", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :name, class: "layui-input", required: true, maxlength: 20,
+            placeholder: "如 辣度 / 加料" %>
+      <%= render "shared/field_errors", errors: @group.errors[:name] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :multi_select, "添加方式", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.check_box :multi_select, "lay-skin": "switch", "lay-text": "多选|单选",
+            "lay-filter": "flavor-multi" %>
+    </div>
+  </div>
+
+  <%# 单选时最少最多由模型强制 1/1，表单不显示；切到多选才露出这两项 %>
+  <div class="campus-multi-only">
+    <div class="layui-form-item">
+      <%= form.label :min_select, "最少选择", class: "layui-form-label" %>
+      <div class="layui-input-block">
+        <%= form.number_field :min_select, min: "1", step: "1", class: "layui-input" %>
+        <%= render "shared/field_errors", errors: @group.errors[:min_select] %>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <%= form.label :max_select, "最多选择", class: "layui-form-label" %>
+      <div class="layui-input-block">
+        <%= form.number_field :max_select, min: "0", step: "1", class: "layui-input" %>
+        <div class="layui-word-aux">0 表示不限</div>
+        <%= render "shared/field_errors", errors: @group.errors[:max_select] %>
+      </div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :recommend, "排序", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.number_field :recommend, min: "0", step: "1", class: "layui-input" %>
+      <div class="layui-word-aux">数字越大越靠前</div>
+      <%= render "shared/field_errors", errors: @group.errors[:recommend] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", good_flavor_groups_path(@good), class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>
+
+<%# 布局在 layui 之后 yield :page_scripts，开关显隐逻辑放这里才能拿到 layui 全局 %>
+<% content_for :page_scripts do %>
+  <script>
+    // 单选/多选开关切换时显隐最少最多两项；layui 的 switch 皮肤点的是自己画的 div，
+    // 所以走 layui.form 的 switch 事件而不是原生 change
+    layui.use("form", function () {
+      var sync = function () {
+        var on = document.querySelector('input[name="flavor_group[multi_select]"]').checked;
+        document.querySelector(".campus-multi-only").style.display = on ? "" : "none";
+      };
+      layui.form.on("switch(flavor-multi)", sync);
+      sync();
+    });
+  </script>
+<% end %>

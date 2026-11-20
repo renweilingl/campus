@@ -22,6 +22,10 @@ Rails.application.routes.draw do
   resources :goods, except: :show do
     # 规格从属于菜品，挂在菜品路由下；列表页全字段展示，不做详情页
     resources :specs, controller: "good_specs", except: :show
+    # 口味分组从属于菜品、口味从属于分组，两级嵌套；列表页全字段展示，不做详情页
+    resources :flavor_groups, except: :show do
+      resources :flavors, except: :show
+    end
   end
 
   # 我的店铺：店主自助改自己门店的基础信息；营业状态走门店列表的开关、

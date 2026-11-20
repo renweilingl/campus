@@ -1,0 +1,56 @@
+<% content_for(:title, "口味分组") %>
+
+<div class="campus-page-head">
+  <%= link_to "返回菜品", goods_path, class: "layui-btn layui-btn-primary" %>
+  <%= link_to "新增分组", new_good_flavor_group_path(@good), class: "layui-btn" %>
+</div>
+
+<% if @groups.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>分组名称</th>
+        <th>添加方式</th>
+        <th>选择项数</th>
+        <th>排序</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @groups.each do |group| %>
+        <tr>
+          <td><%= link_to group.name, good_flavor_group_flavors_path(@good, group) %></td>
+          <td>
+            <% if group.multi_select %>
+              <span class="layui-badge layui-bg-green">多选</span>
+            <% else %>
+              <span class="layui-badge-rim">单选</span>
+            <% end %>
+          </td>
+          <td>
+            <% if group.multi_select %>
+              最少 <%= group.min_select %> 项，最多 <%= group.max_select_unlimited? ? "不限" : "#{group.max_select} 项" %>
+            <% else %>
+              1 项
+            <% end %>
+          </td>
+          <td><%= group.recommend %></td>
+          <td>
+            <%= link_to "口味", good_flavor_group_flavors_path(@good, group), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= link_to "编辑", edit_good_flavor_group_path(@good, group), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to "删除", good_flavor_group_path(@good, group), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该分组？分组下的口味会一起删除')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      菜品「<%= @good.name %>」还没有口味分组，<%= link_to "新增第一个分组", new_good_flavor_group_path(@good) %>。
+    </div>
+  </div>
+<% end %>

@@ -55,6 +55,7 @@
           </td>
           <td>
             <%= link_to "规格", good_specs_path(good), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= link_to "口味", good_flavor_groups_path(good), class: "layui-btn layui-btn-xs layui-btn-primary" %>
             <%= link_to "编辑", edit_good_path(good), class: "layui-btn layui-btn-xs layui-btn-primary" %>
             <%= button_to "删除", good_path(good), method: :delete,
                   class: "layui-btn layui-btn-xs layui-btn-danger",
