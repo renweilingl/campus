@@ -1,0 +1,38 @@
+<%# 嵌套路由用了 controller: 改名，helper 名（good_specs_path）和 polymorphic 推出来的
+    （good_good_specs_path）对不上，所以表单地址显式写死，不走 model: [parent, child] %>
+<%= form_with model: @spec,
+      url: (@spec.persisted? ? good_spec_path(@good, @spec) : good_specs_path(@good)),
+      class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :name, "规格名称", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :name, class: "layui-input", required: true, maxlength: 20,
+            placeholder: "如 大份 / 加辣" %>
+      <%= render "shared/field_errors", errors: @spec.errors[:name] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :price_in_yuan, "单价（元）", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :price_in_yuan, type: :number, step: "0.01", min: "0", class: "layui-input" %>
+      <%= render "shared/field_errors", errors: @spec.errors[:price] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :recommend, "排序", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.number_field :recommend, min: "0", step: "1", class: "layui-input" %>
+      <div class="layui-word-aux">数字越大越靠前</div>
+      <%= render "shared/field_errors", errors: @spec.errors[:recommend] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", good_specs_path(@good), class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>

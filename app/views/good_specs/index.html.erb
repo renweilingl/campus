@@ -1,0 +1,41 @@
+<% content_for(:title, "规格设置") %>
+
+<div class="campus-page-head">
+  <%= link_to "返回菜品", goods_path, class: "layui-btn layui-btn-primary" %>
+  <%= link_to "新增规格", new_good_spec_path(@good), class: "layui-btn" %>
+</div>
+
+<% if @specs.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>规格名称</th>
+        <th>单价</th>
+        <th>排序</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @specs.each do |spec| %>
+        <tr>
+          <td><%= link_to spec.name, edit_good_spec_path(@good, spec) %></td>
+          <td><%= spec.price_in_yuan %> 元</td>
+          <td><%= spec.recommend %></td>
+          <td>
+            <%= link_to "编辑", edit_good_spec_path(@good, spec), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to "删除", good_spec_path(@good, spec), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该规格？')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      菜品「<%= @good.name %>」还没有规格，<%= link_to "新增第一个规格", new_good_spec_path(@good) %>。
+    </div>
+  </div>
+<% end %>

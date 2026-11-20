@@ -9,6 +9,10 @@ class Good < ApplicationRecord
   validates :shop, presence: { message: "必须存在" }
   validates :category, presence: { message: "必须存在" }
 
+  # 删菜品要连带删规格，否则 good_specs.good_id 的外键会挡住删除
+  has_many :specs, class_name: "GoodSpec", foreign_key: :good_id,
+                   inverse_of: :good, dependent: :destroy
+
   # 金额字段以“分”存储；表单与列表统一走 *_in_yuan 读写，避免各处手写 / 100.0
   MONEY_ATTRIBUTES = %i[price].freeze
 
@@ -50,7 +54,7 @@ class Good < ApplicationRecord
   def image_display_url
     return if image_url.blank?
 
-    AliyunOss.instance.path_to_url(image_url)
+    FileMap.new(AliyunOss.instance.path_to_url(image_url), "img").secrity_src
   end
 
   MONEY_ATTRIBUTES.each do |attribute|

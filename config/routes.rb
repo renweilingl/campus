@@ -19,7 +19,10 @@ Rails.application.routes.draw do
   resources :categories, except: :show
 
   # 菜品的字段列表页也全展示了（图片以缩略图呈现），同样不做详情页
-  resources :goods, except: :show
+  resources :goods, except: :show do
+    # 规格从属于菜品，挂在菜品路由下；列表页全字段展示，不做详情页
+    resources :specs, controller: "good_specs", except: :show
+  end
 
   namespace :admin do
     root to: "dashboard#show"
