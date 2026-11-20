@@ -1,0 +1,31 @@
+<%# 路由挂在 my_shop 单数资源下，helper 不带 shop 参数；记录归属由控制器从 current_user.shop 取 %>
+<%= form_with model: @hour,
+      url: (@hour.persisted? ? my_shop_business_hour_path(@hour) : my_shop_business_hours_path),
+      class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :start_time, "开始时间", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.time_field :start_time, class: "layui-input", required: true,
+            value: @hour.start_time&.strftime("%H:%M") %>
+      <%= render "shared/field_errors", errors: @hour.errors[:start_time] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :end_time, "结束时间", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.time_field :end_time, class: "layui-input", required: true,
+            value: @hour.end_time&.strftime("%H:%M") %>
+      <div class="layui-word-aux">早于开始时间视为跨天，如 22:00 - 02:00 表示到次日凌晨 2 点</div>
+      <%= render "shared/field_errors", errors: @hour.errors[:end_time] %>
+      <%= render "shared/field_errors", errors: @hour.errors[:base] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", my_shop_business_hours_path, class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>

@@ -52,12 +52,15 @@
               <li class="layui-nav-item<%= " layui-this" if current_page?(root_path) %>">
                 <%= link_to root_path do %><i class="layui-icon layui-icon-console"></i>控制台<% end %>
               </li>
-              <li class="layui-nav-item<%= " layui-this" if controller_name == "shops" %>">
-                <%= link_to shops_path do %><i class="layui-icon layui-icon-home"></i>门店管理<% end %>
-              </li>
-              <%# 没有门店的账号点进去只会被弹回控制台，入口跟着收起来 %>
+              <%# /shops 已收为管理员专属管理台，非管理员不给入口 %>
+              <% if current_user.admin? %>
+                <li class="layui-nav-item<%= " layui-this" if controller_name == "shops" %>">
+                  <%= link_to shops_path do %><i class="layui-icon layui-icon-home"></i>门店管理<% end %>
+                </li>
+              <% end %>
+              <%# 没有门店的账号点进去只会被弹回控制台，入口跟着收起来；营业时间页也算我的店铺这一段 %>
               <% if current_user.shop %>
-                <li class="layui-nav-item<%= " layui-this" if controller_name == "my_shops" %>">
+                <li class="layui-nav-item<%= " layui-this" if controller_name == "my_shops" || controller_name == "business_hours" %>">
                   <%= link_to edit_my_shop_path do %><i class="layui-icon layui-icon-location"></i>我的店铺<% end %>
                 </li>
               <% end %>

@@ -28,9 +28,11 @@ Rails.application.routes.draw do
     end
   end
 
-  # 我的店铺：店主自助改自己门店的基础信息；营业状态走门店列表的开关、
-  # 收款商户号属支付配置，都不在自助范围，见 MyShopsController::MY_SHOP_FIELDS
-  resource :my_shop, controller: "my_shops", only: %i[edit update]
+  # 我的店铺：店主自助改自己门店的基础信息；营业时间段也在这里自助设置，
+  # URL 不带 shop_id，记录一律取自 current_user.shop
+  resource :my_shop, controller: "my_shops", only: %i[edit update] do
+    resources :business_hours, except: :show
+  end
 
   namespace :admin do
     root to: "dashboard#show"

@@ -5,6 +5,7 @@ module ApplicationHelper
   SECTION_TITLES = {
     "dashboard" => "控制台",
     "shops" => "门店管理",
+    "business_hours" => "营业时间",
     "categories" => "菜品分类",
     "goods" => "菜品管理",
     "good_specs" => "规格设置",

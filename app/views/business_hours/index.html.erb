@@ -1,0 +1,45 @@
+<% content_for(:title, "营业时间") %>
+
+<div class="campus-page-head">
+  <%= link_to "返回我的店铺", edit_my_shop_path, class: "layui-btn layui-btn-primary" %>
+  <%= link_to "新增时间段", new_my_shop_business_hour_path, class: "layui-btn" %>
+</div>
+
+<% if @hours.any? %>
+  <table class="layui-table">
+    <thead>
+      <tr>
+        <th>时间段</th>
+        <th>是否跨天</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @hours.each do |hour| %>
+        <tr>
+          <td><%= link_to hour.label, edit_my_shop_business_hour_path(hour) %></td>
+          <td>
+            <% if hour.cross_day? %>
+              <span class="layui-badge layui-bg-orange">跨天</span>
+            <% else %>
+              <span class="layui-badge-rim">当日</span>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "编辑", edit_my_shop_business_hour_path(hour), class: "layui-btn layui-btn-xs layui-btn-primary" %>
+            <%= button_to "删除", my_shop_business_hour_path(hour), method: :delete,
+                  class: "layui-btn layui-btn-xs layui-btn-danger",
+                  form_class: "campus-inline-form",
+                  onclick: "return confirm('确认删除该时间段？')" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="layui-card">
+    <div class="layui-card-body campus-empty">
+      门店「<%= @shop.name %>」还没有营业时间段，<%= link_to "新增第一个时间段", new_my_shop_business_hour_path %>。
+    </div>
+  </div>
+<% end %>

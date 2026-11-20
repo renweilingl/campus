@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_20_073051) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_074135) do
+  create_table "business_hours", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.time "start_time", null: false
+    t.time "end_time", null: false
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id"], name: "index_business_hours_on_shop_id"
+  end
+
   create_table "categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.boolean "visible", default: true, null: false
@@ -110,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_073051) do
     t.index ["phone"], name: "index_users_on_phone", unique: true
   end
 
+  add_foreign_key "business_hours", "shops"
   add_foreign_key "categories", "shops"
   add_foreign_key "categories", "users"
   add_foreign_key "flavor_groups", "goods"

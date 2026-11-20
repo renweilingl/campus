@@ -9,6 +9,9 @@ class ShopsController < ApplicationController
   ].freeze
 
   def index
+    # 门店管理台仅管理员：index? 收严后这里必须显式 authorize，
+    # 否则 policy_scope 只会把列表收窄成自己的店、并不拒绝访问
+    authorize Shop
     @shops = policy_scope(Shop).order(created_at: :desc)
   end
 

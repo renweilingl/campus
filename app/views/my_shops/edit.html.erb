@@ -3,6 +3,10 @@
 <%# 顶栏栏目名已是“我的店铺”，h1 用店铺名承担页面身份，不重复栏目名 %>
 <h1 class="campus-title"><%= @shop.name %></h1>
 
+<div class="campus-page-head">
+  <%= link_to "营业时间管理", my_shop_business_hours_path, class: "layui-btn layui-btn-primary" %>
+</div>
+
 <div class="layui-card">
   <div class="layui-card-body">
     <%= form_with model: @shop, url: my_shop_path, method: :patch, class: "layui-form" do |form| %>

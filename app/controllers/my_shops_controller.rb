@@ -28,8 +28,8 @@ class MyShopsController < ApplicationController
         return
       end
 
-      # 记录永远是 current_user.shop，owner_or_admin? 在这里等价于“店主本人”
-      authorize @shop, :update?
+      # 记录永远是 current_user.shop；/shops 已收为管理员专属，店主自助用仅店主的 update_own?
+      authorize @shop, :update_own?
     end
 
     def my_shop_params

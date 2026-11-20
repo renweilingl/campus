@@ -6,6 +6,8 @@ class Shop < ApplicationRecord
   has_many :categories, dependent: :destroy
   # 菜品也直接挂在门店上，删门店同样要连带删
   has_many :goods, dependent: :destroy
+  # 营业时间段从属于门店，删门店要连带删，否则外键挡住删除
+  has_many :business_hours, dependent: :destroy
   validates :user, presence: { message: "必须存在" }
   # 一个账号只能开一家门店；DB 层 shops.user_id 也是唯一索引，见
   # 20261119062340_add_unique_index_to_shops_user_id，这里负责给出中文文案
