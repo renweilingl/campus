@@ -20,16 +20,18 @@ class User < ApplicationRecord
   # 一人一店：能被指派为门店归属的账号，见 ShopsController#owner_candidates
   scope :without_shop, -> { enabled.where.missing(:shop) }
 
-  validates :phone, presence: true,
+  validates :phone, presence: { message: "不能为空" },
                     format: { with: PHONE_FORMAT, message: "手机号格式不正确" },
-                    uniqueness: true
-  validates :nickname, length: { maximum: 30 }, allow_blank: true
+                    uniqueness: { message: "已被使用" }
+  validates :nickname, length: { maximum: 30, message: "不能超过 30 个字符" }, allow_blank: true
 
   # sorcery 的 encrypt_password 是 before_validation 回调，所以这里直接看 password 有没有被赋值：
   # 新建必填；更新时只有传了新密码才校验，否则改个昵称也会被要求填密码
-  validates :password, presence: true, length: { minimum: 6, maximum: 72 }, confirmation: true,
+  validates :password, presence: { message: "不能为空" },
+                       length: { minimum: 6, maximum: 72, message: "长度需在 6 到 72 个字符之间" },
+                       confirmation: { message: "与密码不一致" },
                        if: :password_required?
-  validates :password_confirmation, presence: true, if: :password_required?
+  validates :password_confirmation, presence: { message: "不能为空" }, if: :password_required?
 
   # sorcery 的 authenticate 会检查这个钩子，返回 false 时登录失败并给出 :inactive 原因
   def active_for_authentication?

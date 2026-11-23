@@ -1,0 +1,63 @@
+<%= form_with model: @user, url: (@user.persisted? ? admin_user_path(@user) : admin_users_path),
+      class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :phone, "手机号", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%# 手机号是登录凭据：创建时指定，编辑页只读展示，update_params 也不收 %>
+      <% if @user.persisted? %>
+        <%= form.text_field :phone, class: "layui-input", disabled: true %>
+        <div class="layui-word-aux">登录凭据，不可修改</div>
+      <% else %>
+        <%= form.telephone_field :phone, class: "layui-input", required: true,
+              inputmode: "numeric", maxlength: 11, placeholder: "请输入手机号" %>
+      <% end %>
+      <%= render "shared/field_errors", errors: @user.errors[:phone] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :nickname, "昵称", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :nickname, class: "layui-input", placeholder: "选填" %>
+      <%= render "shared/field_errors", errors: @user.errors[:nickname] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :role, "角色", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%# layui 会把原生 select 隐藏后换成自己的皮肤，所以不能加 required——
+          隐藏的控件触发 HTML5 校验时浏览器只会拦下提交、不给任何提示 %>
+      <%= form.select :role, [ [ "用户", "user" ], [ "管理员", "admin" ] ] %>
+      <%= render "shared/field_errors", errors: @user.errors[:role] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :password, "密码", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.password_field :password, class: "layui-input", required: !@user.persisted?,
+            autocomplete: "new-password" %>
+      <% if @user.persisted? %>
+        <div class="layui-word-aux">留空保持原密码</div>
+      <% end %>
+      <%= render "shared/field_errors", errors: @user.errors[:password] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :password_confirmation, "确认密码", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.password_field :password_confirmation, class: "layui-input", required: !@user.persisted?,
+            autocomplete: "new-password" %>
+      <%= render "shared/field_errors", errors: @user.errors[:password_confirmation] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", admin_users_path, class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>

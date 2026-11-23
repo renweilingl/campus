@@ -74,6 +74,9 @@
                 <li class="layui-nav-item<%= " layui-this" if current_page?(admin_root_path) %>">
                   <%= link_to admin_root_path do %><i class="layui-icon layui-icon-set"></i>管理后台<% end %>
                 </li>
+                <li class="layui-nav-item<%= " layui-this" if controller_path == "admin/users" %>">
+                  <%= link_to admin_users_path do %><i class="layui-icon layui-icon-user"></i>用户管理<% end %>
+                </li>
               <% end %>
             </ul>
           </div>

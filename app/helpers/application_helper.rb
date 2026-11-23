@@ -13,6 +13,7 @@ module ApplicationHelper
     "flavors" => "口味",
     "my_shops" => "我的店铺",
     "admin/dashboard" => "管理后台",
+    "admin/users" => "用户管理",
     "sessions" => "登录"
   }.freeze
 

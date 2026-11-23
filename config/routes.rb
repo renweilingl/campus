@@ -36,6 +36,13 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: "dashboard#show"
+
+    # 用户管理仅管理员；列表页已展示全部字段，不做详情页
+    resources :users, except: :show do
+      member do
+        patch :toggle_status
+      end
+    end
   end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
