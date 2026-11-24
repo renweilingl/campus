@@ -28,15 +28,26 @@
 
   <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin<%= " campus-no-side" unless logged_in? %>">
-      <%# 白顶栏：左边栏目名、右边身份区，样式对齐设计图；品牌块在侧栏顶部 %>
+      <%# 白顶栏：设计图里左边只有折叠图标、右边是营业状态胶囊和门店胶囊；
+          栏目名不在顶栏，改由内容区标题条承担（见 main 里的 campus-page-title） %>
       <header class="layui-header">
-        <span class="campus-section-title"><%= current_section_title %></span>
-
         <ul class="layui-nav layui-layout-right">
           <% if logged_in? %>
-            <li class="layui-nav-item campus-who"><%= current_user.display_name %>（<%= current_user.role %>）</li>
+            <% if current_user.shop %>
+              <li class="layui-nav-item">
+                <span class="campus-status-pill <%= current_user.shop.status ? "is-open" : "is-closed" %>">
+                  <i class="campus-status-dot"></i><%= current_user.shop.status ? "营业中" : "已停业" %>
+                </span>
+              </li>
+            <% end %>
             <li class="layui-nav-item">
-              <%= button_to "退出登录", logout_path, method: :delete,
+              <span class="campus-shop-chip">
+                <%= image_tag "/icon.png", class: "campus-shop-avatar", alt: "" %>
+                <span><%= current_user.shop&.name || current_user.display_name %></span>
+              </span>
+            </li>
+            <li class="layui-nav-item">
+              <%= button_to "退出", logout_path, method: :delete,
                     class: "campus-logout", form_class: "campus-logout-form" %>
             </li>
           <% end %>
@@ -84,14 +95,19 @@
       <% end %>
 
       <main class="layui-body campus-body">
+        <%# 设计图的排版：灰底内容区顶部一条栏目名标题条，下面整块白面板承载页面 %>
+        <% if logged_in? %>
+          <div class="campus-page-title"><%= current_section_title %></div>
+        <% end %>
         <% flash.each do |type, message| %>
           <div class="campus-flash campus-flash-<%= type %>">
             <i class="layui-icon <%= type.to_s == "alert" ? "layui-icon-close-fill" : "layui-icon-ok-circle" %>"></i>
             <span><%= message %></span>
           </div>
         <% end %>
-
+        <% if logged_in? %><div class="campus-page-panel"><% end %>
         <%= yield %>
+        <% if logged_in? %></div><% end %>
       </main>
     </div>
 

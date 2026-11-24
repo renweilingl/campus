@@ -7,22 +7,28 @@
  *
  * 原则：只写 layui 没有的东西，以及必须改的默认值，不要在这里重新实现组件。
  * body 的字号和字体族故意不写，沿用 layui 的 14px / -apple-system + PingFang SC。
+ *
+ * 配色与排版取样自 2026-11-24 的设计图（商家中心风格）：
+ * 白侧栏 + 蓝色主色 #409eff + 灰底内容区 + 栏目名标题条 + 白面板 + 线框表格 + 文字链接操作。
  */
 
 :root {
-  --bg: #f6f7f9;
+  --bg: #f0f2f5;
   --card: #fff;
-  --text: #1c1c1e;
-  --muted: #6b6b70;
-  --line: #e3e3e6;
+  --text: #303133;
+  --muted: #909399;
+  --line: #ebeef5;
   /* 对齐 .layui-btn 的 background-color，否则链接和按钮会是两种颜色 */
-  --accent: #16baaa;
-  --danger: #c0392b;
-  --ok: #1e7d43;
-  /* 侧栏配色取样自设计图：整列自上而下渐变，选中项深一档 */
-  --side-top: #03c58d;
-  --side-bottom: #0ac263;
-  --side-active: #0fa674;
+  --accent: #409eff;
+  --danger: #f56c6c;
+  --ok: #67c23a;
+  --warn: #e6a23c;
+  /* 侧栏：白底、灰字、选中项浅蓝圆角胶囊 */
+  --side-bg: #fff;
+  --side-text: #303133;
+  --side-icon: #606266;
+  --side-hover: #f5f7fa;
+  --side-active-bg: #ecf5ff;
 }
 
 body {
@@ -37,7 +43,7 @@ a {
 /* --- 左侧导航布局（layui-layout-admin）---
  * 定位和宽度用 layui 自带的：header 固定 60px、side 固定 200px、body left:200px。
  * 与设计图对齐的两处调整：侧栏从 top:0 通高（品牌块放在侧栏里），
- * header 让出侧栏宽度（left:200px）变成一条白底栏目条。
+ * header 让出侧栏宽度（left:200px）变成一条白底顶栏。
  * 另补 layui 没给的：
  *   1. side 的底色——.layui-side 本身没有 background；
  *   2. body 的 overflow——它是 absolute 且 top/bottom 都定了，不加 overflow-y
@@ -48,18 +54,19 @@ a {
  */
 .layui-layout-admin .campus-side {
   top: 0;
-  background: linear-gradient(180deg, var(--side-top), var(--side-bottom));
+  background: var(--side-bg);
+  border-right: 1px solid var(--line);
 }
 
-/* 品牌块在侧栏顶部，和下面的菜单连成一整条绿色 */
+/* 品牌块在侧栏顶部：设计图是左对齐的深色粗体字，不是居中的白字 */
 .campus-brand {
   display: block;
   height: 60px;
   line-height: 60px;
-  text-align: center;
-  font-size: 16px;
+  padding: 0 20px;
+  font-size: 17px;
   font-weight: 700;
-  color: #fff;
+  color: var(--side-text);
 }
 
 /* 品牌块占了 60px，scroll 区不能再是 100% 高，否则溢出侧栏 */
@@ -67,33 +74,46 @@ a {
   height: auto;
 }
 
-/* 侧栏里的 ul.layui-nav 自带 #2f363c 深灰底，会盖住渐变，改成透明 */
+/* 侧栏里的 ul.layui-nav 自带 #2f363c 深灰底，会盖住白底，改成透明 */
 .campus-side .layui-nav {
   background-color: transparent;
 }
 
-/* 选中项用深一档的绿，替代 layui 默认的青色块 */
+/* 菜单项左右收 8px，给选中/悬停的圆角胶囊留出内缩 */
+.campus-side .layui-nav-tree .layui-nav-item a {
+  margin: 2px 8px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--side-text);
+}
+
+.campus-side .layui-nav-tree .layui-nav-item a:hover {
+  background-color: var(--side-hover);
+  color: var(--side-text);
+}
+
+/* 选中项：浅蓝底 + 蓝字的圆角胶囊，替代 layui 默认的整行色块 */
 .campus-side .layui-nav-tree .layui-this,
 .campus-side .layui-nav-tree .layui-this > a,
 .campus-side .layui-nav-tree .layui-this > a:hover {
-  background-color: var(--side-active);
-  color: #fff;
+  background-color: var(--side-active-bg);
+  color: var(--accent);
 }
 
-/* 设计图里未选中的菜单文字是纯白，不是 layui 默认的 70% 白 */
-.campus-side .layui-nav .layui-nav-item a {
-  color: #fff;
-}
-
-/* 导航图标：layui 默认 .layui-icon 是深灰、贴基线，白字侧栏里要跟着文字走并垂直居中 */
+/* 导航图标：layui 默认 .layui-icon 是深灰、贴基线；这里跟文字走并垂直居中，
+   选中项跟着变蓝 */
 .campus-side .layui-nav .layui-icon {
   margin-right: 8px;
   padding: 0;
-  color: inherit;
+  color: var(--side-icon);
   vertical-align: middle;
 }
 
-/* --- 顶栏：设计图是纯白一条，左栏目名、右身份区，无阴影无描边 --- */
+.campus-side .layui-nav .layui-this > a .layui-icon {
+  color: var(--accent);
+}
+
+/* --- 顶栏：纯白一条，右侧状态胶囊 + 门店胶囊 + 退出，无阴影 --- */
 .layui-layout-admin .layui-header {
   left: 200px;
   background-color: #fff;
@@ -103,34 +123,66 @@ a {
   left: 0;
 }
 
-.campus-section-title {
-  padding-left: 20px;
-  font-size: 16px;
-  font-weight: 600;
+.layui-header {
+  border-bottom: 1px solid var(--line);
+}
+
+.layui-header .layui-layout-right .layui-nav-item {
   line-height: 60px;
-  color: #333;
 }
 
-.layui-body.campus-body {
-  padding: 24px 15px 48px;
-  overflow-y: auto;
-  background: #fff;
-}
-
-/* 未登录时不渲染侧栏（只有登录页），body 不能还留着 200px 的左偏移 */
-.campus-no-side .layui-body {
-  left: 0;
-}
-
-/* layui 的 .layui-nav-item 假设子元素是 <a>；放纯文本（当前用户）或
- * button_to 生成的 <form> 时，内边距和字色都得自己补。
- * 白顶栏上文字用设计图的 #333；line-height 用 inherit 跟 header 的 60px 走。
- */
-.campus-who {
-  padding: 0 20px;
+/* 营业状态胶囊：营业绿、停业灰，圆点 + 文字 */
+.campus-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 16px;
   font-size: 13px;
-  line-height: inherit;
-  color: #333;
+  vertical-align: middle;
+}
+
+.campus-status-pill.is-open {
+  background: #f0f9eb;
+  border-color: #c2e7b0;
+  color: var(--ok);
+}
+
+.campus-status-pill.is-closed {
+  background: #f4f4f5;
+  border-color: #d3d4d6;
+  color: var(--muted);
+}
+
+.campus-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* 门店胶囊：圆头像 + 店名的白底圆角条 */
+.campus-shop-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px 0 5px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.campus-shop-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
 }
 
 .campus-logout-form {
@@ -140,13 +192,13 @@ a {
 }
 
 .campus-logout {
-  padding: 0 20px;
+  padding: 0 16px;
   border: 0;
   background: none;
   font: inherit;
-  font-size: 14px;
+  font-size: 13px;
   line-height: inherit;
-  color: #333;
+  color: var(--muted);
   cursor: pointer;
   transition: color 0.3s;
 }
@@ -155,8 +207,47 @@ a {
   color: var(--accent);
 }
 
-.layui-header {
-  border-bottom: 1px solid #e5e5e5;
+/* --- 内容区：灰底 + 标题条 + 白面板 --- */
+.layui-body.campus-body {
+  padding: 0 16px 48px;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+/* 未登录时不渲染侧栏（只有登录页），body 不能还留着 200px 的左偏移 */
+.campus-no-side .layui-body {
+  left: 0;
+}
+
+/* 栏目名标题条：贴着顶栏通栏一条浅灰带，粗体栏目名靠左 */
+.campus-page-title {
+  margin: 0 -16px 16px;
+  padding: 16px 24px;
+  background: #ebecef;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* 页面内容整块落在白面板里；视图自带的 layui-card 在面板内退成透明，避免双层边框 */
+.campus-page-panel {
+  padding: 20px;
+  background: var(--card);
+  border-radius: 4px;
+}
+
+.campus-page-panel .layui-card {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.campus-page-panel .layui-card-body {
+  padding: 0;
+}
+
+.campus-page-panel .campus-empty {
+  padding: 24px 0;
 }
 
 @media screen and (max-width: 767.98px) {
@@ -169,6 +260,8 @@ a {
     position: static;
     width: 100%;
     margin-top: 60px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
   }
 
   .campus-brand {
@@ -192,8 +285,9 @@ a {
     text-align: center;
   }
 
-  /* 横条排 4 项时默认 20px 左右内边距放不下图标，收窄让位 */
-  .layui-layout-admin .campus-side .layui-nav-item a {
+  /* 横条排多项时默认内边距放不下图标，收窄让位；胶囊内缩也收小 */
+  .layui-layout-admin .campus-side .layui-nav-tree .layui-nav-item a {
+    margin: 4px 2px;
     padding: 0 6px;
   }
 
@@ -209,7 +303,7 @@ a {
   }
 
   /* 有侧栏横条时它已经顶开了 header，body 不用再顶一次 */
-  .layui-layout-admin .layui-side + .layui-body {
+  .layui-layout-admin .campus-side + .layui-body {
     margin-top: 0;
   }
 
@@ -224,14 +318,22 @@ a {
     line-height: 60px;
   }
 
-  .campus-who,
   .campus-logout {
-    padding: 0 12px;
+    padding: 0 10px;
   }
 
-  .campus-section-title {
-    padding-left: 12px;
+  .campus-shop-chip span:last-child {
+    display: none;
+  }
+
+  .campus-page-title {
+    margin: 0 -16px 12px;
+    padding: 12px 16px;
     font-size: 15px;
+  }
+
+  .campus-page-panel {
+    padding: 12px;
   }
 }
 
@@ -249,7 +351,7 @@ a {
   gap: 8px;
   margin-bottom: 15px;
   padding: 10px 15px;
-  border-radius: 2px;
+  border-radius: 4px;
   font-size: 14px;
 }
 
@@ -258,12 +360,12 @@ a {
 }
 
 .campus-flash-notice {
-  background: #e7f6ec;
+  background: #f0f9eb;
   color: var(--ok);
 }
 
 .campus-flash-alert {
-  background: #fdecea;
+  background: #fef0f0;
   color: var(--danger);
 }
 
@@ -299,11 +401,13 @@ a {
 }
 
 /* --- 列表页头 ---
- * 页面大标题已收进顶栏栏目名，页头只剩右侧的动作按钮。 */
+ * 页面大标题由内容区标题条承担，页头只剩动作按钮；
+ * 设计图的工具条靠左排（输入框 + 查询 + 新增），不再右对齐。 */
 .campus-page-head {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  gap: 10px;
   margin-bottom: 15px;
 }
 
@@ -312,6 +416,136 @@ a {
   display: inline-block;
   margin: 0;
   vertical-align: middle;
+}
+
+/* --- 按钮配色：主色蓝、危险红、警告橙，圆角 4px --- */
+.layui-btn {
+  background-color: var(--accent);
+  border-radius: 4px;
+}
+
+.layui-btn:hover {
+  background-color: #66b1ff;
+}
+
+.layui-btn-primary {
+  background-color: #fff;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+}
+
+.layui-btn-primary:hover {
+  background-color: var(--side-active-bg);
+  border-color: #c6e2ff;
+  color: var(--accent);
+}
+
+.layui-btn-danger {
+  background-color: var(--danger);
+}
+
+.layui-btn-danger:hover {
+  background-color: #f78989;
+}
+
+.layui-btn-warm {
+  background-color: var(--warn);
+}
+
+.layui-btn-warm:hover {
+  background-color: #ebb563;
+}
+
+/* --- 表格：设计图是线框表（只有横分隔线）+ 浅灰表头，
+     操作列是文字链接而不是小按钮 --- */
+.campus-page-panel .layui-table {
+  margin: 0;
+}
+
+.campus-page-panel .layui-table th,
+.campus-page-panel .layui-table td {
+  padding: 13px 16px;
+  border-width: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.campus-page-panel .layui-table thead th {
+  background: #f5f7fa;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.campus-page-panel .layui-table tbody tr:hover {
+  background: #f5f7fa;
+}
+
+/* xs 按钮在表格里退成文字链接：编辑蓝、删除红、停业橙 */
+.campus-page-panel .layui-table .layui-btn-xs {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.campus-page-panel .layui-table .layui-btn-xs:hover {
+  background: none;
+  text-decoration: underline;
+}
+
+.campus-page-panel .layui-table .layui-btn-xs.layui-btn-primary {
+  border: 0;
+  background: none;
+  color: var(--accent);
+}
+
+.campus-page-panel .layui-table .layui-btn-xs.layui-btn-danger {
+  background: none;
+  color: var(--danger);
+}
+
+.campus-page-panel .layui-table .layui-btn-xs.layui-btn-warm {
+  background: none;
+  color: var(--warn);
+}
+
+/* --- 徽章配色跟主色板走 --- */
+.layui-badge {
+  background-color: var(--danger);
+}
+
+.layui-bg-green {
+  background-color: var(--ok) !important;
+}
+
+.layui-bg-orange {
+  background-color: var(--warn) !important;
+}
+
+.layui-bg-blue {
+  background-color: var(--accent) !important;
+}
+
+.layui-badge-rim {
+  border-color: #dcdfe6;
+  color: #606266;
+}
+
+/* --- 表单控件跟主色板走：焦点蓝、开关蓝、下拉选中浅蓝 --- */
+.layui-input:focus,
+.layui-textarea:focus {
+  border-color: var(--accent) !important;
+}
+
+.layui-form-onswitch {
+  border-color: var(--accent);
+  background-color: var(--accent);
+}
+
+.layui-form-select dl dd.layui-this {
+  background-color: var(--side-active-bg);
+  color: var(--accent);
 }
 
 /* --- 表单行内校验错误 --- */
@@ -337,7 +571,7 @@ a {
   flex: none;
   width: 40px;
   height: 40px;
-  border-radius: 2px;
+  border-radius: 4px;
   object-fit: cover;
   background: var(--bg);
 }
