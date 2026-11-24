@@ -21,4 +21,12 @@ module ApplicationHelper
   def current_section_title
     SECTION_TITLES.fetch(controller_path) { content_for(:title).presence || "Campus" }
   end
+
+  # 备案号硬编码在这一处（footer 展示并链到工信部）；空串表示号码还没给，
+  # footer 只渲染版权行，号码到了改这一行即可
+  ICP_LICENSE = "".freeze
+
+  def icp_license
+    ICP_LICENSE
+  end
 end

@@ -384,6 +384,11 @@ a {
     padding: 0 10px;
   }
 
+  /* 移动端没有固定侧栏，footer 通栏贴底 */
+  .campus-footer {
+    left: 0;
+  }
+
   .campus-shop-chip span:last-child {
     display: none;
   }
@@ -620,6 +625,34 @@ a {
 
 .campus-empty {
   color: var(--muted);
+}
+
+/* --- footer：版权 + 备案号，固定在视口底部的一条灰底信息条；
+     有侧栏时让开 200px，只盖内容区 --- */
+.campus-footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 200px;
+  z-index: 990;
+  padding: 8px 16px;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.campus-no-side .campus-footer {
+  left: 0;
+}
+
+.campus-footer a {
+  color: var(--muted);
+}
+
+.campus-footer a:hover {
+  color: var(--accent);
 }
 
 /* --- 菜品列表 --- */

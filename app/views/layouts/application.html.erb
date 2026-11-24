@@ -119,6 +119,14 @@
         <% if logged_in? %><div class="campus-page-panel"><% end %>
         <%= yield %>
         <% if logged_in? %></div><% end %>
+
+        <footer class="campus-footer">
+          © <%= Time.current.year %> Campus
+          <%# 备案号没配时只留版权行；配了之后链到工信部备案查询 %>
+          <% if icp_license.present? %>
+            · <%= link_to icp_license, "https://beian.miit.gov.cn", target: "_blank", rel: "noopener" %>
+          <% end %>
+        </footer>
       </main>
     </div>
 
