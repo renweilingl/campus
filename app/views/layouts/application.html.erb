@@ -75,11 +75,19 @@
                   <%= link_to edit_my_shop_path do %><i class="layui-icon layui-icon-location"></i>我的店铺<% end %>
                 </li>
               <% end %>
-              <li class="layui-nav-item<%= " layui-this" if controller_name == "categories" %>">
-                <%= link_to categories_path do %><i class="layui-icon layui-icon-app"></i>菜品分类<% end %>
-              </li>
-              <li class="layui-nav-item<%= " layui-this" if controller_name == "goods" %>">
-                <%= link_to goods_path do %><i class="layui-icon layui-icon-cart"></i>菜品管理<% end %>
+              <%# 菜品是二级导航：父项只负责展开收起，真正的面挂在两个子项上；
+                  当前页落在子项（含规格 / 口味子页）时父项自动展开、对应子项高亮 %>
+              <% dishes_active = %w[categories goods good_specs flavor_groups flavors].include?(controller_name) %>
+              <li class="layui-nav-item campus-nav-group<%= " layui-nav-itemed" if dishes_active %>">
+                <%= link_to "javascript:;" do %><i class="layui-icon layui-icon-app"></i>菜品管理<% end %>
+                <dl class="layui-nav-child">
+                  <dd class="<%= "layui-this" if controller_name == "categories" %>">
+                    <%= link_to "菜品分类", categories_path %>
+                  </dd>
+                  <dd class="<%= "layui-this" if %w[goods good_specs flavor_groups flavors].include?(controller_name) %>">
+                    <%= link_to "菜品管理", goods_path %>
+                  </dd>
+                </dl>
               </li>
               <li class="layui-nav-item<%= " layui-this" if controller_name == "printers" %>">
                 <%= link_to printers_path do %><i class="layui-icon layui-icon-print"></i>打印机管理<% end %>

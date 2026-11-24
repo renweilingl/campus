@@ -92,8 +92,12 @@ a {
   color: var(--side-text);
 }
 
-/* 选中项：浅蓝底 + 蓝字的圆角胶囊，替代 layui 默认的整行色块 */
-.campus-side .layui-nav-tree .layui-this,
+/* 选中项：浅蓝底 + 蓝字的圆角胶囊，替代 layui 默认的整行色块；
+   底色只给内层 a（li/dd 保持透明），否则胶囊的内缩和圆角会被整行底色盖掉 */
+.campus-side .layui-nav-tree .layui-this {
+  background-color: transparent;
+}
+
 .campus-side .layui-nav-tree .layui-this > a,
 .campus-side .layui-nav-tree .layui-this > a:hover {
   background-color: var(--side-active-bg);
@@ -111,6 +115,40 @@ a {
 
 .campus-side .layui-nav .layui-this > a .layui-icon {
   color: var(--accent);
+}
+
+/* --- 二级导航（菜品分组）---
+ * layui 树形子菜单默认是半透明黑底 + 白字（配深色侧栏），白侧栏下要改成
+ * 透明底 + 灰字；选中子项沿用一级的浅蓝胶囊 */
+.campus-side .layui-nav-tree .layui-nav-child {
+  background-color: transparent;
+}
+
+/* 子项缩进到父项文字下方；一级 a 的 margin/圆角规则是后代选择器，子项同样吃到 */
+.campus-side .layui-nav-tree .layui-nav-child a {
+  padding: 0 12px 0 40px;
+  color: var(--side-icon);
+}
+
+.campus-side .layui-nav-tree .layui-nav-child a:hover {
+  background-color: var(--side-hover);
+  color: var(--side-text);
+}
+
+.campus-side .layui-nav-tree .layui-nav-child dd.layui-this {
+  background-color: transparent;
+}
+
+.campus-side .layui-nav-tree .layui-nav-child dd.layui-this > a,
+.campus-side .layui-nav-tree .layui-nav-child dd.layui-this > a:hover {
+  background-color: var(--side-active-bg);
+  color: var(--accent);
+}
+
+/* 展开态父项被 layui 用 !important 强制白字（深色底假设），这里同权重压回深灰 */
+.campus-side .layui-nav-tree .layui-nav-itemed > a,
+.campus-side .layui-nav-tree .layui-nav-itemed > a:hover {
+  color: var(--side-text) !important;
 }
 
 /* --- 顶栏：纯白一条，右侧状态胶囊 + 门店胶囊 + 退出，无阴影 --- */
@@ -288,6 +326,30 @@ a {
   /* 横条排多项时默认内边距放不下图标，收窄让位；胶囊内缩也收小 */
   .layui-layout-admin .campus-side .layui-nav-tree .layui-nav-item a {
     margin: 4px 2px;
+    padding: 0 6px;
+  }
+
+  /* 二级分组在横条里拍平：藏掉父项，两个子项并排当普通标签 */
+  .layui-layout-admin .campus-side .campus-nav-group {
+    display: flex;
+    flex: 2;
+  }
+
+  .layui-layout-admin .campus-side .campus-nav-group > a {
+    display: none;
+  }
+
+  .campus-side .layui-nav-tree .campus-nav-group .layui-nav-child {
+    display: flex;
+    width: 100%;
+  }
+
+  .campus-side .layui-nav-tree .campus-nav-group .layui-nav-child dd {
+    flex: 1;
+    text-align: center;
+  }
+
+  .campus-side .layui-nav-tree .campus-nav-group .layui-nav-child a {
     padding: 0 6px;
   }
 
