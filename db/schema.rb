@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_20_074135) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_24_074603) do
   create_table "business_hours", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.time "start_time", null: false
     t.time "end_time", null: false
@@ -89,6 +89,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_074135) do
     t.index ["user_id"], name: "index_goods_on_user_id"
   end
 
+  create_table "printers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "brand", null: false
+    t.string "name", null: false
+    t.string "code", null: false
+    t.string "key", null: false
+    t.boolean "enabled", default: true, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_printers_on_code", unique: true
+    t.index ["user_id", "name"], name: "index_printers_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_printers_on_user_id"
+  end
+
   create_table "shops", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "contact_phone", null: false
@@ -128,5 +142,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_20_074135) do
   add_foreign_key "goods", "categories"
   add_foreign_key "goods", "shops"
   add_foreign_key "goods", "users"
+  add_foreign_key "printers", "users"
   add_foreign_key "shops", "users"
 end

@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :categories, dependent: :destroy
   # 菜品同样直接挂在账号上（冗余归属），理由和顺序同上
   has_many :goods, dependent: :destroy
+  # 打印机是账号自己的设备，删账号要连带删，否则外键挡住删除
+  has_many :printers, dependent: :destroy
 
   PHONE_FORMAT = /\A1[3-9]\d{9}\z/
   ROLES = %w[user admin].freeze

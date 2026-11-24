@@ -34,6 +34,9 @@ Rails.application.routes.draw do
     resources :business_hours, except: :show
   end
 
+  # 打印机是账号自己的设备，列表页全字段展示（密钥除外），不做详情页
+  resources :printers, except: :show
+
   namespace :admin do
     root to: "dashboard#show"
 

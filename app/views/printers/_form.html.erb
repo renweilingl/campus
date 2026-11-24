@@ -1,0 +1,52 @@
+<%= form_with model: @printer, class: "layui-form" do |form| %>
+  <div class="layui-form-item">
+    <%= form.label :brand, "打印机品牌", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%# layui 会把原生 select 隐藏后换成自己的皮肤，所以不能加 required——
+          隐藏的控件触发 HTML5 校验时浏览器只会拦下提交、不给任何提示 %>
+      <%= form.select :brand, Printer::BRAND_LABELS.map { |key, label| [ label, key ] } %>
+      <%= render "shared/field_errors", errors: @printer.errors[:brand] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :name, "打印机名称", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :name, class: "layui-input", required: true, maxlength: 20,
+            placeholder: "如 前台飞蛾一号" %>
+      <%= render "shared/field_errors", errors: @printer.errors[:name] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :code, "打印机编码", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :code, class: "layui-input", required: true, maxlength: 50,
+            placeholder: "设备 SN 码" %>
+      <%= render "shared/field_errors", errors: @printer.errors[:code] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :key, "打印机密钥", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.text_field :key, class: "layui-input", required: true, maxlength: 100,
+            placeholder: "厂商下发的密钥 / KEY" %>
+      <%= render "shared/field_errors", errors: @printer.errors[:key] %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <%= form.label :enabled, "是否启用", class: "layui-form-label" %>
+    <div class="layui-input-block">
+      <%= form.check_box :enabled, "lay-skin": "switch", "lay-text": "启用|停用" %>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <%= form.submit "保存", class: "layui-btn" %>
+      <%= link_to "取消", printers_path, class: "layui-btn layui-btn-primary" %>
+    </div>
+  </div>
+<% end %>
