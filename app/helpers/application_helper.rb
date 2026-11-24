@@ -7,7 +7,7 @@ module ApplicationHelper
     "shops" => "门店管理",
     "business_hours" => "营业时间",
     "categories" => "菜品分类",
-    "goods" => "菜品管理",
+    "goods" => "菜品列表",
     "printers" => "打印机管理",
     "good_specs" => "规格设置",
     "flavor_groups" => "口味分组",

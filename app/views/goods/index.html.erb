@@ -1,4 +1,4 @@
-<% content_for(:title, "菜品管理") %>
+<% content_for(:title, "菜品列表") %>
 
 <%# 没有门店的账号 policy 会拒绝创建，按钮跟着收起来；空页头只剩 margin，所以整块不渲染 %>
 <% if policy(Good.new).create? %>
